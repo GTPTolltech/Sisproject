@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>เกมแยกขยะ</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mali:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .mali-extralight {
+        font-family: "Mali", cursive;
+        font-weight: 200;
+        font-style: normal;
+      }
+
+      .mali-light {
+        font-family: "Mali", cursive;
+        font-weight: 300;
+        font-style: normal;
+      }
+
+      .mali-regular {
+        font-family: "Mali", cursive;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      .mali-medium {
+        font-family: "Mali", cursive;
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      .mali-semibold {
+        font-family: "Mali", cursive;
+        font-weight: 600;
+        font-style: normal;
+      }
+
+      .mali-bold {
+        font-family: "Mali", cursive;
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      .mali-extralight-italic {
+        font-family: "Mali", cursive;
+        font-weight: 200;
+        font-style: italic;
+      }
+
+      .mali-light-italic {
+        font-family: "Mali", cursive;
+        font-weight: 300;
+        font-style: italic;
+      }
+
+      .mali-regular-italic {
+        font-family: "Mali", cursive;
+        font-weight: 400;
+        font-style: italic;
+      }
+
+      .mali-medium-italic {
+        font-family: "Mali", cursive;
+        font-weight: 500;
+        font-style: italic;
+      }
+
+      .mali-semibold-italic {
+        font-family: "Mali", cursive;
+        font-weight: 600;
+        font-style: italic;
+      }
+
+      .mali-bold-italic {
+        font-family: "Mali", cursive;
+        font-weight: 700;
+        font-style: italic;
+      }
+
+      body {
+        font-family: "Mali", cursive;
+        text-align: center;
+        background-image: url(img/bg.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .game-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 50px;
+      }
+      .bin-container {
+        text-align: center;
+      }
+      .bin {
+        width: 180px;
+        height: 250px;
+        border-radius: 20px 20px 10px 10px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: white;
+        font-weight: bold;
+        position: relative;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+        border-top: 8px solid rgba(0, 0, 0, 0.2);
+        border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+      }
+      .bin-lid {
+        position: absolute;
+        top: -20px;
+        left: 10px;
+        width: 80%;
+        height: 30px;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 15px 15px 0 0;
+      }
+
+      .trash {
+        width: 90px;
+        height: 90px;
+        cursor: grab;
+        margin: 5px;
+        display: none;
+      }
+      .have-border {
+        /* border: #007bff 1px solid; */
+      }
+      #score,
+      #timer {
+        font-family: "Courier New", monospace; /* เปลี่ยนฟอนต์ */
+        font-size: 20px; /* เพิ่มขนาดฟอนต์ */
+        color: #333; /* เปลี่ยนสี */
+        letter-spacing: 2px; /* เพิ่มระยะห่างตัวอักษร */
+        font-weight: bold;
+      }
+      #startButton,
+      #resetButton {
+        font-size: 20px;
+        padding: 0px 30px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body class="container">
+    <h1 class="mt-4">เกมแยกขยะ</h1>
+    <p class="lead">ลากขยะไปใส่ถังที่ถูกต้อง!</p>
+
+    <div class="d-flex justify-content-center gap-5 flex-wrap">
+      <div class="bin-container">
+        <div class="bin" id="organic-bin" data-type="organic"></div>
+        <p>🌱 ขยะเปียก</p>
+      </div>
+      <div class="bin-container">
+        <div class="bin" id="general-bin" data-type="general"></div>
+        <p>🗑️ ขยะทั่วไป</p>
+      </div>
+      <div class="bin-container">
+        <div class="bin" id="recycle-bin" data-type="recycle"></div>
+        <p>♻️ รีไซเคิล</p>
+      </div>
+      <div class="bin-container">
+        <div class="bin" id="hazard-bin" data-type="hazard"></div>
+        <p>☠️ ขยะอันตราย</p>
+      </div>
+      <div class="bin-container">
+        <div class="bin" id="infectious-bin" data-type="infectious"></div>
+        <p>🦠 ขยะติดเชื้อ</p>
+      </div>
+    </div>
+    <div class="have-border">
+      <img src="img/Bin.png" width="90%" height="90%" />
+    </div>
+    <br />
+    <div
+      id="trash-container"
+      class="d-flex justify-content-center flex-wrap gap-2"
+    >
+      <img
+        src="img/plastic-bottle.jpg"
+        class="trash"
+        draggable="true"
+        data-type="recycle"
+        alt="ขวดพลาสติก"
+      />
+      <img
+        src="img/fruit.jpg"
+        class="trash"
+        draggable="true"
+        data-type="organic"
+        alt="เปลือกผลไม้"
+      />
+      <img
+        src="img/battery.jpg"
+        class="trash"
+        draggable="true"
+        data-type="hazard"
+        alt="แบตเตอรี่"
+      />
+      <img
+        src="img/plaster.jpg"
+        class="trash"
+        draggable="true"
+        data-type="infectious"
+        alt="พลาสเตอร์แปะแผล"
+      />
+      <img
+        src="img/paper.jpg"
+        class="trash"
+        draggable="true"
+        data-type="recycle"
+        alt="กระดาษ"
+      />
+      <img
+        src="img/Straw.jpg"
+        class="trash"
+        draggable="true"
+        data-type="general"
+        alt="หลอด"
+      />
+      <img
+        src="img/Metal-can.jpg"
+        class="trash"
+        draggable="true"
+        data-type="recycle"
+        alt="กระป๋องโลหะ"
+      />
+      <img
+        src="img/food.jpg"
+        class="trash"
+        draggable="true"
+        data-type="organic"
+        alt="เศษอาหาร"
+      />
+      <img
+        src="img/garbage bags.jpg"
+        class="trash"
+        draggable="true"
+        data-type="general"
+        alt="ถุงพลาสติก"
+      />
+      <img
+        src="img/broken_glass.png"
+        class="trash"
+        draggable="true"
+        data-type="hazard"
+        alt="เศษแก้ว"
+      />
+      <img
+        src="img/spray.jpg"
+        class="trash"
+        draggable="true"
+        data-type="hazard"
+        alt="กระป๋องสี"
+      />
+      <img
+        src="img/mask.jpg"
+        class="trash"
+        draggable="true"
+        data-type="infectious"
+        alt="หน้ากากอนามัยใช้แล้ว"
+      />
+    </div>
+    <br />
+    <!-- <button class="btn btn-danger" onclick="resetGame()">รีเซ็ตเกม</button> -->
+
+    <div class="d-flex justify-content-center gap-5 flex-wrap have-border">
+      <!-- <div id="score">คะแนน: 0</div> -->
+      <div id="score">คะแนน: <span style="color: #007bff">0</span></div>
+      <div id="timer">เวลา: 120 วินาที</div>
+      <button id="startButton" class="btn btn-success">เริ่ม</button>
+      <button id="resetButton" class="btn btn-danger">รีเซ็ต</button>
+    </div>
+    <div style="margin-top: 20px">
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem
+        dignissimos placeat enim rem? Reprehenderit eum doloribus, rerum
+        possimus ipsum voluptates aperiam. Esse velit blanditiis veniam sequi ea
+        recusandae accusantium eius?
+      </p>
+    </div>
+    <script>
+      let trashQueue = Array.from(document.querySelectorAll(".trash"));
+      let score = 0;
+      let time = 60;
+      let timeLeft = time;
+      let timerInterval;
+      let gameStarted = false;
+      let correctCount = 0; // เพิ่มตัวแปร correctCount
+
+      function shuffleArray(array) {
+        // ... (โค้ดเดิม)
+      }
+
+      function startGame() {
+        if (!gameStarted) {
+          gameStarted = true;
+          score = 0;
+          timeLeft = time;
+          updateScoreDisplay();
+          updateTimerDisplay();
+          shuffleArray(trashQueue);
+          trashQueue.forEach((trash) => {
+            trash.style.display = "inline-block";
+          });
+          startTimer();
+        }
+      }
+
+      function resetGame() {
+        gameStarted = false;
+        clearInterval(timerInterval);
+        trashQueue.forEach((trash) => {
+          trash.style.display = "none";
+          document.getElementById("trash-container").appendChild(trash);
+        });
+        timeLeft = time;
+        updateTimerDisplay();
+        correctCount = 0; // รีเซ็ต correctCount
+      }
+
+      function startTimer() {
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          updateTimerDisplay();
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            endGame();
+          }
+        }, 1000);
+      }
+
+      function updateScoreDisplay() {
+        document.querySelector("#score span").textContent = score;
+      }
+
+      function updateTimerDisplay() {
+        document.getElementById(
+          "timer"
+        ).textContent = `เวลา: ${timeLeft} วินาที`;
+      }
+
+      function endGame() {
+        if (gameStarted) {
+          alert(`จบเกม! คะแนนของคุณคือ: ${score}`);
+          gameStarted = false;
+        }
+      }
+
+      function checkCompletion() {
+        if (correctCount === trashQueue.length) {
+          alert("สำเร็จ! ยินดีด้วย!");
+          gameStarted = false;
+          clearInterval(timerInterval);
+        }
+      }
+
+      document.querySelectorAll(".bin").forEach((bin) => {
+        bin.addEventListener("dragover", (event) => {
+          event.preventDefault();
+        });
+
+        bin.addEventListener("drop", (event) => {
+          event.preventDefault();
+          const trash = document.querySelector(
+            '.trash[draggable="true"]:hover'
+          );
+          if (
+            trash &&
+            bin.getAttribute("data-type") === trash.getAttribute("data-type")
+          ) {
+            bin.appendChild(trash);
+            trash.draggable = false;
+            score += 10;
+            updateScoreDisplay();
+            correctCount++; // เพิ่ม correctCount
+            checkCompletion(); // ตรวจสอบว่าทายถูกครบหมดหรือยัง
+          } else if (trash) {
+            score -= 5;
+            updateScoreDisplay();
+            alert("ผิดพลาด! กรุณาลองใหม่");
+          }
+        });
+      });
+
+      document
+        .getElementById("startButton")
+        .addEventListener("click", startGame);
+      document
+        .getElementById("resetButton")
+        .addEventListener("click", resetGame);
+      resetGame();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
