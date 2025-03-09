@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>เกมแยกขยะ</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -258,7 +259,7 @@
     <!-- <div id="score">คะแนน: 0</div> -->
     <div id="score">คะแนน: <span style="color: #007bff">0</span></div>
     <div id="timer">เวลา: 120 วินาที</div>
-    <button id="startButton" class="btn btn-success">เริ่ม</button>
+    <button id="startButton" class="btn btn-success" disabled>เริ่ม</button>
     <button id="resetButton" class="btn btn-danger">รีเซ็ต</button>
   </div>
   <div style="margin-top: 20px; background-color: aliceblue ; padding: 3px;">
@@ -294,6 +295,9 @@
           bin.style.pointerEvents = "auto"; // เปิดการคลิก
           bin.style.opacity = "1"; // ทำให้กลับมาปกติ
         });
+
+      document.getElementById("resetButton").disabled = false;
+      document.getElementById("startButton").disabled = true;
       }
     }
 
@@ -317,6 +321,8 @@
         bin.style.pointerEvents = "none";
         bin.style.opacity = "0.5";
       });
+      document.getElementById("resetButton").disabled = true;
+      document.getElementById("startButton").disabled = false;
     }
 
     function startTimer() {
@@ -342,7 +348,17 @@
 
     function endGame() {
       if (gameStarted) {
-        alert(`จบเกม! คะแนนของคุณคือ: ${score}`);
+        Swal.fire({
+          title: 'จบเกม!',
+          text: `คะแนนของคุณคือ: ${score}`,
+          icon: 'success', // หรือ 'error', 'warning', 'info' ตามความเหมาะสม
+          confirmButtonText: 'เล่นอีกครั้ง',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            resetGame();
+            startGame();
+          }
+        });
         gameStarted = false;
       }
     }
@@ -373,7 +389,12 @@
 
     function checkCompletion() {
       if (trashQueue.length === 0) {
-        alert("สำเร็จ! ยินดีด้วย!");
+        Swal.fire({
+          title: 'สำเร็จ! ยินดีด้วย!',
+          icon: 'success',
+          timer: 3000, // แสดงข้อความ 1 วินาที
+          showConfirmButton: false,
+        });
         gameStarted = false;
         clearInterval(timerInterval);
       } else if (currentTrashIndex < trashQueue.length) {
@@ -404,7 +425,12 @@
         if (trashSelect == "") {
           alert("กรุณาเลือกขยะก่อน");
         } else if (trashSelect == binSelect) {
-          alert("correct");
+          Swal.fire({
+            title: 'ถูกต้อง!',
+            icon: 'success',
+            timer: 1000, // แสดงข้อความ 1 วินาที
+            showConfirmButton: false,
+          });
           score += 10;
           updateScoreDisplay();
           const selectedItem = trashQueue[currentTrashIndex]; // เก็บ item ที่เลือก
@@ -414,15 +440,16 @@
           correctCount++;
           trashSelect = ""; // reset trashSelect
           nowTrash.style.display = "none";
-
-
-
-         
         } else {
           binSelect = "";
           score -= 5;
           updateScoreDisplay();
-          alert("wrong");
+          Swal.fire({
+            title: 'ผิด!',
+            icon: 'error',
+            timer: 1000,
+            showConfirmButton: false,
+          });
         }
       });
     });
